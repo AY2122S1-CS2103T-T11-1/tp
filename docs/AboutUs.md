@@ -38,15 +38,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Scheduling and Tracking
 * Responsibilities:
 
-### Joel Sung
+### Jean Doe
 
-<img src="images/Joel.png" width="200px">
+<img src="images/johndoe.png" width="200px">
 
-[[github](http://github.com/joelsung)]
-[[portfolio](team/joelsung.md)]
+[[github](http://github.com/johndoe)]
+[[portfolio](team/johndoe.md)]
 
-* Role: Team lead
-* Responsibilities: Overall project coordination + Project documentation quality
+* Role: Developer
+* Responsibilities: Dev Ops + Threading
 
 ### Sun Yu Pei
 
