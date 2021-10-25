@@ -10,11 +10,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.Pane?>
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
     <GridPane HBox.hgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
         </columnConstraints>
+
         <VBox alignment="CENTER_LEFT" minHeight="105" GridPane.columnIndex="0">
 
             <padding>
@@ -44,6 +46,8 @@
                 <Text fill="#e9afff">Participants:</Text>
                 <FlowPane fx:id="participants"/>
             </HBox>
+
+            <Pane prefHeight="4"/>
 
             <HBox spacing="5" alignment="CENTER_LEFT">
                 <Text fill="#e9afff">Blacklist:</Text>

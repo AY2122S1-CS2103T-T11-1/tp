@@ -77,7 +77,7 @@ The *Sequence Diagram* below shows how the components interact with each other f
 Each of the four main components (also shown in the diagram above),
 
 * defines its *API* in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point).
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
@@ -91,7 +91,9 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `StudentListPanel`, `EventListPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `StudentListPanel`, `StatusBarFooter`, `EventListPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+
 
 The `UI` component uses the JavaFx UI framework and heavily utilizes CSS as well. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2122S1-CS2103T-T11-1/tp/blob/master/src/main/resources/view/MainWindow.fxml) is specified in [`MainWindow.fxml`](https://github.com/AY2122S1-CS2103T-T11-1/tp/blob/master/src/main/resources/view/MainWindow.fxml)
 
@@ -116,11 +118,11 @@ How the `Logic` component works:
 1. When `Logic` is called upon to execute a command, it uses the `AddressBookParser` class to parse the user command.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `AddCommand`) which is executed by the `LogicManager`.
 1. The command can communicate with the `Model` when it is executed (e.g. to add a student).
-1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+1. The result of the command execution is encapsulated as a `CommandResult` object which is returned from `Logic`.
 
-The Sequence Diagram below illustrates the interactions within the `Logic` component for the `execute("delete 1")` API call.
+The Sequence Diagram below illustrates the interactions within the `Logic` component for the `execute("delete s/e0123456")` API call.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+![Interactions Inside the Logic Component for the `delete s/e0123456` Command](images/DeleteSequenceDiagram.png)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 </div>
@@ -141,14 +143,21 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores the address book data i.e., 
+  * all `Student` objects (which are contained in a `UniqueStudentList` object).
+  * all `Event` objects (which are contained in a `UniqueEventList` object).
+* stores the currently 'selected' `Student` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Student>` that can be 'observed' 
+* similarly, stores the currently 'selected' `Event` objects as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Event>` that can be 'observed' 
+* the UI is bound to these lists so the UI can automatically update when the data in either list changes.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+**<<<Check if this part can delete**
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Student` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Student` needing their own `Tag` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
+
+**>>>**
 
 </div>
 
@@ -166,13 +175,16 @@ The `Storage` component,
 
 ### Common classes
 
-Classes used by multiple components are in the `seedu.addressbook.commons` package.
+Classes used by multiple components are in the `nustracker.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+
+**<<< Check if we are going to keep this `undo` feature >>>**
 
 ### \[Proposed\] Undo/redo feature
 
@@ -316,26 +328,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *  `  | expert user                                | export event data file                      | easily share or transfer event data to load in another computer |
 | `* *  `  | expert user                                | export student data file                    | easily share or transfer the student database to load in another computer |
 | `* *  `  | user                                       | blacklist students from events              | track which students are blacklisted from attending events |
+| `* *  `  | user                                       | remove students from an event's blacklist   | allow that student to attend the event  |
 | `* *  `  | user                                       | load student data from external file        | quickly add a large number of students |
 | `* *  `  | user                                       | load event data file                        | update the list of events being managed in database |
 | `* *  `  | user                                       | filter students by event                    | find students attending a particular event |
-| `* *  `  | user                                       | view list of Telegram ID                    | get a list of Telegram IDs corresponding to selected students |
-| `* *  `  | user                                       | filter students by location                 | view addresses of students attending an event to help plan a convenient location |
 | `* *  `  | user                                       | filter students by year                     | select students who have certain years of seniority in NUS |
 | `* *  `  | user                                       | view event list of student                  | see what events a student has attended before or are attending |
 | `* *  `  | user                                       | filter students by major                    | find students of a particular major |
 | `* *  `  | user                                       | filter students by faculty                  | find students from a particular faculty |
 | `* *  `  | user                                       | open settings menu                          | adjust settings |
-| `* *  `  | user                                       | toggle autosave                             | choose whether to save data automatically or manually             |
-| `* *  `  | user                                       | use autosave                                | save the database constantly and automatically                             |
-| `*    `  | expert user                                | mass edit student data         | update data of similar students more efficiently |
+| `* *  `  | user                                       | toggle between the events and students list | quickly and efficiently view the list I want to see |
+| `* *  `  | user                                       | use auto save                               | save the database constantly and automatically                             |
+| `*    `  | expert user                                | mass edit student data                      | update data of similar students more efficiently |
 
 
 *{More to be added}*
 
 ### Use cases
 
-(For all use cases below, the _System_ is **NUSTracker** and the _Actor_ is the **user**, unless specified otherwise)
+For all use cases below, the _System_ is **NUSTracker** and the _Actor_ is the **user**, unless specified otherwise
+
+<br><br>
 
 **<u>Use case UC1 - Add a student</u>**
 
@@ -352,35 +365,37 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions:**
 * 1a. User types in an invalid format
-    * 1a1. AddressBook shows an error messages, and displays the correct format to use.
+    * 1a1. AddressBook shows an error message, and displays the correct format to use.
 
       Use case ends.
+
+<br><br>
 
 **<u>Use case UC2 - Delete a student</u>**
 
 **Preconditions:** -
 
-**Guarantees:** Student is deleted from program, and saved data
+**Guarantees:** Student is deleted from program, and display is updated
 
 **MSS:**
 
-1.  User requests to list students
-2.  AddressBook shows a list of students
-3.  User requests to delete a specific student in the list
-4.  AddressBook deletes the student
+1. User requests to delete a specific student in the list
+2. AddressBook deletes the student, and informs user
 
     Use case ends.
 
 **Extensions:**
-* 2a. The list is empty.
+* 1a. User types in an invalid format
+    * 1a1. AddressBook shows an error message, and displays the correct format to use.
 
-  Use case ends.
+      Use case ends
+  
+* 1b. The student does not exist.
+  * 1b1. AddressBook shows an error message, informing the user that the student does not exist.
 
-* 3a. The given index is invalid.
+    Use case ends.
 
-    * 3a1. AddressBook shows an error message.
-
-      Use case resumes at step 2.
+<br><br>
 
 **<u>Use case UC3 - Filter students by name</u>**
 
@@ -412,9 +427,123 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     
         Use case ends.
 
+<br><br>
 
 
+**<u>Use case UC4 - Add an event</u>**
 
+**Preconditions:** -
+
+**Guarantees:** New event info is saved, and displayed
+
+**MSS:**
+
+1. User types in command
+2. AddressBook adds the event to the address book
+3. AddressBook displays that the event has been added, and corresponding details
+
+    Use case ends.
+
+**Extensions:**
+* 1a. User types in an invalid format
+  * 1a1. AddressBook shows an error message, and displays the correct format to use.
+
+    Use case ends.
+
+
+* 1b. An event with the same name already exists in the address book.
+  * 1b1. AddressBook shows an error message, informing the user that an event with the same name already exists.
+
+    Use case ends.
+
+<br><br>
+
+**<u>Use case UC5 - Delete an event</u>**
+
+**Preconditions:** -
+
+**Guarantees:** Event is deleted from program, and display is updated
+
+**MSS:**
+
+1. User types in command
+2. AddressBook deletes the event from the address book
+3. AddressBook displays that the event has been deleted, and corresponding details
+
+   Use case ends.
+
+**Extensions:**
+* 1a. User types in an invalid format
+
+<br><br>
+
+**<u>Use case UC6 - Blacklist a student</u>**
+
+**Preconditions:** -
+
+**Guarantees:** Student is blacklisted from the event, and display is updated
+
+**MSS:**
+
+1. User types in command
+2. AddressBook adds student to the event's blacklist
+3. AddressBook displays that the student has been blacklisted
+
+   Use case ends.
+
+**Extensions:**
+* 1a. User types in an invalid format
+    * 1a1. AddressBook shows an error message, and displays the correct format to use.
+
+      Use case ends.
+
+
+* 1b. The event does not exist in the address book.
+    * 1b1. AddressBook shows an error message, informing the user that the event does not exist.
+
+      Use case ends.
+
+
+* 1c. The student is already in the event's blacklist.
+    * 1b1. AddressBook shows an error message, informing the user that the student is already in the event's blacklist.
+
+      Use case ends.
+
+<br><br>
+
+**<u>Use case UC7 - Whitelist a student</u>**
+
+**Preconditions:** -
+
+**Guarantees:** Student is removed from the event's blacklist, and display is updated
+
+**MSS:**
+
+1. User types in command
+2. AddressBook removes student from the event's blacklist
+3. AddressBook displays that the student has been removed from the blacklist
+
+   Use case ends.
+
+**Extensions:**
+* 1a. User types in an invalid format
+    * 1a1. AddressBook shows an error message, and displays the correct format to use.
+
+      Use case ends.
+
+
+* 1b. The event does not exist in the address book.
+    * 1b1. AddressBook shows an error message, informing the user that the event does not exist.
+
+      Use case ends.
+
+
+* 1c. The student is not in the event's blacklist.
+    * 1b1. AddressBook shows an error message, informing the user that the student is not in the event's blacklist.
+
+      Use case ends.
+
+<br><br>
 
 **<u>Use case UC8 - Enroll a student into an event</u>**
 
@@ -425,34 +554,30 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to enroll a student into an event.
-2.  AddressBook updates the event to have this student as a participant.
-3.  AddressBook updates the student to be enrolled into this event.
-4.  AddressBook shows that the student has now been enrolled.
+2.  nustracker updates the event to have this student as a participant.
+3.  nustracker updates the student to be enrolled into this event.
+4.  nustracker shows that the student has now been enrolled.
 
     Use case ends.
 
 **Extensions:**
 * 1a. User types in an invalid format.
-    * 1a1. AddressBook shows an error message, and displays the correct format to use.
-
+    * 1a1. nustracker shows an error message, and displays the correct format to use.
       Use case ends.
 
-
-* 1b. The specified student does not exist in the AddressBook.
-    * 1b1. AddressBook shows an error message, informing the user that the specified student does not exist.
-    
+* 1b. The specified student does not exist in nustracker.
+    * 1b1. nustracker shows an error message, informing the user that the specified student does not exist.
     Use case ends.
 
-* 1c. The specified event does not exist in the AddressBook.
-    * 1c1. AddressBook shows an error message, informing the user that the specified event does not exist.
-
+* 1c. The specified event does not exist in nustracker.
+    * 1c1. nustracker shows an error message, informing the user that the specified event does not exist.
   Use case ends.
 
 * 1d. The specified student is currently already enrolled into the event.
-    * 1d1. AddressBook shows an error message, informing the user that the specified student is already currently enrolled.
-
+    * 1d1. nustracker shows an error message, informing the user that the specified student is already currently enrolled.
   Use case ends.
 
+<br><br>
 
 **<u>Use case UC9 - Remove a student from an event</u>**
 
@@ -463,38 +588,61 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS:**
 
 1.  User requests to remove a student from an event.
-2.  AddressBook updates the event to remove this student from being a participant.
-3.  AddressBook updates the student to not be enrolled into this event anymore.
-4.  AddressBook shows that the student has now been removed from the event.
+2.  nustracker updates the event to remove this student from being a participant.
+3.  nustracker updates the student to not be enrolled into this event anymore.
+4.  nustracker shows that the student has now been removed from the event.
 
     Use case ends.
 
 **Extensions:**
 * 1a. User types in an invalid format.
-    * 1a1. AddressBook shows an error message, and displays the correct format to use.
+    * 1a1. nustracker shows an error message, and displays the correct format to use.
 
       Use case ends.
-
-
+    
 * 1b. The specified student does not exist in the AddressBook.
-    * 1b1. AddressBook shows an error message, informing the user that the specified student does not exist.
+    * 1b1. nustracker shows an error message, informing the user that the specified student does not exist.
 
   Use case ends.
 
 * 1c. The specified event does not exist in the AddressBook.
-    * 1c1. AddressBook shows an error message, informing the user that the specified event does not exist.
+    * 1c1. nustracker shows an error message, informing the user that the specified event does not exist.
 
   Use case ends.
 
 * 1d. The specified student is not currently enrolled into the event.
-    * 1d1. AddressBook shows an error message, informing the user that the specified student cannot be removed from the event as the student is not a participant.
+    * 1d1. nustracker shows an error message, informing the user that the specified student cannot be removed from the event as the student is not a participant.
 
   Use case ends.
 
+<br><br>
+
+**<u>Use case UC10 - Exporting emails</u>**
+
+**Preconditions:** -
+
+**Guarantees:** -
+
+**MSS:**
+
+1. User requests to export emails from a list of students and provides the name of the file to save it in.
+2. nustracker exports the emails and places them in a save file.
+3. nustracker shows a confirmation message that the emails have been successfully exported.
+
+    Use case ends.
+
+**Extensions:**
+* 1a. User types in an invalid format.
+    * 1a1. nustracker shows an error message, and displays the correct format to use.
+      Use case ends.
+
+* 1b. User types in an invalid name for the save file.
+    * 1b1. nustracker shows an error message, informing the user that the file name they have chosen is invalid.
+  Use case ends.
+    
+<br><br>
 
 
-
-*{More to be added}*
 
 ### Non-Functional Requirements
 
@@ -544,20 +692,25 @@ testers are expected to do more *exploratory* testing.
 
 ### Deleting a student
 
-1. Deleting a student while all students are being shown
+1. Deleting a student
 
-    1. Prerequisites: List all students using the `list` command. Multiple students in the list.
+   1. Test case 1: `delete id/e3223223`<br>
+       Prerequisites: Load sample data or ensure a student with the student id e3223223 exists in the address book.
+   
+       Expected: Student with student ID "e3223223" is deleted. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
 
-    1. Test case: `delete 1`<br>
-       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   2. Test case: `delete id/e0000000`<br>
+     Prerequisites: Load sample data or ensure no student has the student id e0000000 exists in the address book.
 
-    1. Test case: `delete 0`<br>
-       Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
 
-    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Similar to previous.
+   3. Test case: `delete id/e12345`<br>
+   Expected: Incorrect student id format. Error details shown in the status message. Status bar remains the same.
 
-1. _{ more test cases …​ }_
+   4. Other incorrect delete commands to try: `delete id/`, `delete id/abc`, `delete id/[incorrect student id format]` (correct student id format : `eXXXXXXX` where X is an integer from 0-9)<br>
+      Expected: Similar to previous.
+
+3. _{ more test cases …​ }_
 
 ### Saving data
 
@@ -566,3 +719,4 @@ testers are expected to do more *exploratory* testing.
     1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+

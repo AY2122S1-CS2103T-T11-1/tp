@@ -104,7 +104,7 @@
         </HBox>
 
     </VBox>
-   <Circle fx:id="profilePicture" GridPane.halignment="RIGHT" translateX="-15"/>
+   <Circle fx:id="profilePictureHolder" GridPane.halignment="RIGHT" translateX="-15"/>
       <rowConstraints>
          <RowConstraints />
       </rowConstraints>

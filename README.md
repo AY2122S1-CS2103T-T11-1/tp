@@ -1,6 +1,6 @@
 [![CI Status](https://github.com/AY2122S1-CS2103T-T11-1/tp/workflows/Java%20CI/badge.svg)](https://github.com/AY2122S1-CS2103T-T11-1/tp/actions)
 
-![Ui](docs/images/Ui1.png)
+![Ui](docs/images/Ui.png)
 ![Ui](docs/images/Ui2.png)
 
 This is the Team Project for CS2103T, done by T11-1.

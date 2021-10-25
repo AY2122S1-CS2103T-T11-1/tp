@@ -12,7 +12,7 @@ class EventsCommandTest {
     @Test
     void execute_events_success() {
         CommandResult expectedCommandResult = new CommandResult(EventsCommand.MESSAGE_SHOW_EVENTS_SUCCESS,
-                false, false, false, true);
+                false, false, false, false, true);
         CommandTestUtil.assertCommandSuccess(new EventsCommand(), model, expectedCommandResult, expectedModel);
     }
 }

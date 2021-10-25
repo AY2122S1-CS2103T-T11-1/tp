@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import nustracker.commons.core.LogsCenter;
 import nustracker.model.student.Student;
+import nustracker.storage.ImageStorage;
 
 /**
  * Panel containing the list of students.
@@ -22,7 +23,7 @@ public class StudentListPanel extends UiPart<Region> {
 
     private String glowColorHexCode;
 
-    private ObservableList<Student> studentList;
+    private final ObservableList<Student> studentList;
 
     /**
      * Creates a {@code StudentListPanel} with the given {@code ObservableList}.
@@ -33,6 +34,7 @@ public class StudentListPanel extends UiPart<Region> {
         this.glowColorHexCode = glowColor;
         this.studentList = studentList;
 
+        ImageStorage.createImageFolder();
         fillPanelWithCells(studentList);
     }
 
@@ -44,7 +46,15 @@ public class StudentListPanel extends UiPart<Region> {
      */
     public void updateGlow(String newGlowColorHexCode) {
         glowColorHexCode = newGlowColorHexCode;
+        refreshPanel();
 
+        fillPanelWithCells(studentList);
+    }
+
+    /**
+     * Refreshes the panel, forcing changes made to each {@link StudentCard} to update.
+     */
+    public void refreshPanel() {
         fillPanelWithCells(studentList);
     }
 

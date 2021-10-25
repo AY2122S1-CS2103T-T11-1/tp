@@ -1,5 +1,8 @@
 package nustracker.ui;
 
+/**
+ * A component that is responsible for applying themes to the various UI components.
+ */
 public class ThemeApplier {
 
     private final MainWindow mainWindow;
@@ -68,7 +71,7 @@ public class ThemeApplier {
     /**
      * Removes the theme that corresponds to the enum passed as an argument.
      *
-     * @param removeTheme The Theme to be removed
+     * @param removeTheme The theme to be removed
      */
     private void removeTheme(Theme removeTheme) {
         mainWindow.getRoot().getScene().getStylesheets().remove(removeTheme.toString());
@@ -108,7 +111,7 @@ public class ThemeApplier {
      *
      * @return True if using Light Theme, false if using Dark Theme.
      */
-    public boolean themeOnExit() {
+    public boolean isLightTheme() {
         return currentTheme == Theme.LIGHT;
     }
 

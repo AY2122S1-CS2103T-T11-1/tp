@@ -6,7 +6,7 @@ title: NUSTracker
 [![CI Status](https://github.com/AY2122S1-CS2103T-T11-1/tp/workflows/Java%20CI/badge.svg)](https://github.com/AY2122S1-CS2103T-T11-1/tp/actions)
 [![codecov](https://codecov.io/gh/AY2122S1-CS2103T-T11-1/tp/branch/master/graph/badge.svg)](https://codecov.io/gh/AY2122S1-CS2103T-T11-1/tp)
 
-![Ui](images/Ui1.png)
+![Ui](images/Ui.png)
 
 **NUSTracker is a desktop application for managing NUS student events.** While it has a GUI, most of the user interactions happen using a CLI (Command Line Interface).
 

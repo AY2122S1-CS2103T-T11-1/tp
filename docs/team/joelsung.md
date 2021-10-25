@@ -28,7 +28,16 @@ Given below are my contributions to the project.
 * **Enhancements to existing features**: Changed delete student by index to by student ID
   * Highlights: Whole implementation of delete student command had to be changed. New variables for testing were created to accommodate the new changes.
 
+
 * **Documentation**:
+  * User Guide:
+    * Added documentation for the features `create`, `delete`, `events`, `students`, `blacklist` and `whitelist`.
+  * Developer Guide:
+    * Added implementation for events (updated Model and Storage class diagrams to include event aspects).
+    * Updated Delete sequence diagram.
+    * Added use cases for the features `create`, `delete`, `blacklist` and `whitelist`.
+    
+  
 
 * **Community**:
 

@@ -5,7 +5,7 @@ title: About Us
 
 We are a team based in the [School of Computing, National University of Singapore](http://www.comp.nus.edu.sg).
 
-You can reach us at the email `seer[at]comp.nus.edu.sg`
+You can reach us through the [team repository](https://github.com/AY2122S1-CS2103T-T11-1/tp).
 
 ## Project team
 
@@ -14,7 +14,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/wowsiddanth.png" width="200px">
 
 [[github](https://github.com/wowsiddanth)]
-[[portfolio](team/johndoe.md)]
+[[portfolio](team/wowsiddanth.md)]
 
 * Role: Code Quality
 * Responsibilities: Ensure code is elegant and meets the coding conventions.
@@ -50,7 +50,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ### Sun Yu Pei
 
-<img src="images/syoopie.png" width="200px">
+<img src="images/syoopie.png" width="300px">
 
 [[github](http://github.com/syoopie)]
 [[portfolio](team/syoopie.md)]

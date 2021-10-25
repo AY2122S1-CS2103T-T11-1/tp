@@ -1,109 +1,3 @@
-.background {
-    -fx-background-color: derive(#1d1d1d, 20%);
-    background-color: #383838; /* Used in the default.html file */
-}
-
-.label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Open Sans Semibold";
-    -fx-text-fill: #555555;
-    -fx-opacity: 0.9;
-}
-
-.label-bright {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Open Sans Semibold";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
-}
-
-.label-header {
-    -fx-font-size: 32pt;
-    -fx-font-family: "Open Sans Light";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
-}
-
-.text-field {
-    -fx-font-size: 12pt;
-    -fx-font-family: "Open Sans Semibold";
-}
-
-.tab-pane {
-    -fx-padding: 0 0 0 1;
-}
-
-.tab-pane .tab-header-area {
-    -fx-padding: 0 0 0 0;
-    -fx-min-height: 0;
-    -fx-max-height: 0;
-}
-
-.table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
-    -fx-table-cell-border-color: transparent;
-    -fx-table-header-border-color: transparent;
-    -fx-padding: 5;
-}
-
-.table-view .column-header-background {
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header, .table-view .filler {
-    -fx-size: 35;
-    -fx-border-width: 0 0 1 0;
-    -fx-background-color: transparent;
-    -fx-border-color:
-        transparent
-        transparent
-        derive(-fx-base, 80%)
-        transparent;
-    -fx-border-insets: 0 10 1 0;
-}
-
-.table-view .column-header .label {
-    -fx-font-size: 20pt;
-    -fx-font-family: "Open Sans Light";
-    -fx-text-fill: white;
-    -fx-alignment: center-left;
-    -fx-opacity: 1;
-}
-
-.table-view:focused .table-row-cell:filled:focused:selected {
-   U-fx-background-color: -fx-focus-color;
-}
-
-#studentsButton, #eventsButton, #helpButton, #exitButton {
-    -fx-background-radius: 50;
-    -fx-background-color: #515151;
-    -fx-border-radius: 20;
-    -fx-border-width: 0;
-    -fx-font-size: 20;
-}
-
-#copyLinkButton, #copyAddCommand, #copyFilterCommand, #copyEditCommand, #copyDeleteCommand, #copyListCommand,
-#copyExitCommand, #copyCreateCommand, #copyEnrollCommand, #copyBlackListCommand, #copyWhiteListCommand {
-    -fx-background-radius: 50;
-    -fx-background-color: #515151;
-    -fx-border-radius: 20;
-    -fx-border-width: 0;
-    -fx-font-size: 16;
-}
-
-.split-pane:horizontal .split-pane-divider {
-    -fx-background-color: derive(#1d1d1d, 20%);
-    -fx-border-color: transparent transparent transparent #4d4d4d;
-}
-
-.split-pane {
-    -fx-border-radius: 1;
-    -fx-border-width: 1;
-    -fx-background-color: derive(#1d1d1d, 20%);
-}
-
 /**========================================= Start of Student Card ===================================================*/
 
 /* The container for the student card cells */
@@ -134,10 +28,33 @@
 
 /**========================================= End of Student Card =====================================================*/
 
+/**========================================= Start of Titled Pane ====================================================*/
+
+.titled-pane:default {
+    -fx-text-fill: white;
+}
+
+.titled-pane:focused > .title {
+    -fx-color: #FDB703;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #515151, #515151, #383838;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+}
+
+
+/**========================================= End of Titled Pane ======================================================*/
+
 /**========================================= Start of Placeholder ====================================================*/
 
+/** It is necessary to use ids here as these components do NOT follow the main styling. **/
+
 #commandBoxPlaceholder, #resultDisplayPlaceholder, #statusBarPlaceholder,
-#topContainer, #container, #listPanelPlaceholder, #status-bar, #studentList, #helpWindow {
+#topContainer, #container, #listPanelPlaceholder, #status-bar, #studentList, #helpWindow,
+#firstGridPane, #secondGridPane, #thirdGridPane {
     -fx-background-color: #383838;
 }
 
@@ -175,18 +92,17 @@
  * Author: Pedro Duque Vieira
  * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
  */
+
 .button {
     -fx-padding: 5 22 5 22;
+    -fx-font-family: "Roboto Thin";
+    -fx-text-fill: white;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
     -fx-background-radius: 50;
     -fx-background-color: #515151;
-
-    -fx-border-color: transparent;
     -fx-border-radius: 20;
     -fx-border-width: 2;
-
-    -fx-text-fill: #FFFFFF;
-    -fx-font-family: "Roboto Thin";
+    -fx-border-color: #515151;
     -fx-font-size: 20;
 }
 
@@ -194,21 +110,6 @@
     -fx-text-fill: #779CFF;
     -fx-font-family: Roboto-Bold;
     -fx-effect: dropshadow(gaussian, #E9AFFF, 2, 1, 0, 0);
-}
-
-.button:disabled, .button:default:disabled {
-    -fx-opacity: 0.4;
-    -fx-background-color: #1d1d1d;
-    -fx-text-fill: white;
-}
-
-.button:default {
-    -fx-background-color: -fx-focus-color;
-    -fx-text-fill: #ffffff;
-}
-
-.button:default:hover {
-    -fx-background-color: derive(-fx-focus-color, 30%);
 }
 
 /**========================================= End of buttons ==========================================================*/
@@ -288,6 +189,10 @@
     -fx-font-size: 11;
 }
 
+/**==========================================End of participant label ================================================*/
+
+/**==========================================Start of blacklist label ================================================*/
+
 #blacklist .label {
     -fx-text-fill: white;
     -fx-background-color: #ea3c53;
@@ -296,5 +201,5 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
-/**==========================================End of participant label ================================================*/
 
+/**==========================================End of blacklist label ==================================================*/
