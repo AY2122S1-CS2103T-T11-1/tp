@@ -1,0 +1,55 @@
+@startuml
+!include style.puml
+
+box Logic LOGIC_COLOR_T1
+participant ":EnrollCommandParser" as EnrollCommandParser LOGIC_COLOR
+participant ":ArgumentTokenizer" as ArgumentTokenizer LOGIC_COLOR
+participant ":ParserUtil" as ParserUtil LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "id:StudentId" as StudentId MODEL_COLOR
+participant "n:EventName" as EventName MODEL_COLOR
+end box
+
+activate EnrollCommandParser
+
+EnrollCommandParser -> ArgumentTokenizer: tokenize("id/e0322322 \nev/Sports Camp", \n "id/", "ev/")
+activate ArgumentTokenizer
+
+ArgumentTokenizer --> EnrollCommandParser: argMultiMap
+deactivate ArgumentTokenizer
+
+'Parse StudentId'
+EnrollCommandParser -> ParserUtil:parseStudentId(argMultiMap.getValue("id/"))
+activate ParserUtil
+
+create StudentId
+ParserUtil -> StudentId: new StudentId("e0322322")
+activate StudentId
+
+StudentId --> ParserUtil: id
+deactivate StudentId
+
+ParserUtil --> EnrollCommandParser: id
+deactivate ParserUtil
+
+'Parse EventName'
+EnrollCommandParser -> ParserUtil:parseEventName(argMultiMap.getValue("ev/"))
+activate ParserUtil
+
+create EventName
+ParserUtil -> EventName: new EventName("Sports Camp")
+activate EventName
+
+EventName --> ParserUtil: ev
+deactivate EventName
+
+ParserUtil --> EnrollCommandParser: ev
+deactivate ParserUtil
+
+EnrollCommandParser -[hidden]-> ArgumentTokenizer
+deactivate EnrollCommandParser
+
+
+@enduml

@@ -27,19 +27,14 @@ Given below are my contributions to the project.
 
 * Contributions to DG:
   * Did the initial update of the DG with our new architecture involving events
-  * UML diagrams edited:
-
-![Architecture Sequence Diagram](../images/ArchitectureSequenceDiagram.png)
-
-![general-layout](../images/DeleteSequenceDiagram.png)
-
-![general-layout](../images/UiClassDiagram.png)
-
-![general-layout](../images/ModelClassDiagram.png)
-
-![general-layout](../images/StorageClassDiagram.png)
+  * Edited the existing UML diagrams with our new implementations. These include:
+    * ../images/ArchitectureSequenceDiagram.png
+    * ../images/DeleteSequenceDiagram.png
+    * ../images/UiClassDiagram.png
+    * ../images/ModelClassDiagram.png
+    * ../images/StorageClassDiagram.png
   * Add implementation of create feature
-    * UML diagrams used:
+    * UML diagrams created:
     
 ![CreateSequenceDiagram](../images/CreateSequenceDiagram.png)
 

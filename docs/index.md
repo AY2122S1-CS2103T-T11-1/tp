@@ -13,7 +13,7 @@ title: nustracker
 
 ![Ui](images/Ui.png) 
 
-![Ui](images/Ui1.png)
+![Ui](images/user-guide/after-creating-event.png)
 
 **nustracker** is a desktop application, made for NUS event directors and student leaders of student organizations in NUS School of Computing to:
 * keep track

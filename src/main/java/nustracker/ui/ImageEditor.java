@@ -11,7 +11,7 @@ import javafx.scene.shape.Circle;
  */
 class ImageEditor {
 
-    public static final Color DEFAULT_COLOR = Color.WHITE;
+    public static final Color DEFAULT_COLOR = Color.web("#e9afff");
     private final Circle profilePictureHolder;
 
     /**

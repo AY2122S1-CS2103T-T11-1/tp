@@ -15,10 +15,10 @@ box Model MODEL_COLOR_T1
 participant ":Model" as Model MODEL_COLOR
 end box
 
-[-> LogicManager : execute("delete id/e0123456")
+[-> LogicManager : execute("delete \nid/e0123456")
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("delete id/e0123456")
+LogicManager -> AddressBookParser : parseCommand("delete \nid/e0123456")
 activate AddressBookParser
 
 create DeleteCommandParser
@@ -28,10 +28,10 @@ activate DeleteCommandParser
 DeleteCommandParser --> AddressBookParser
 deactivate DeleteCommandParser
 
-AddressBookParser -> DeleteCommandParser : parse("delete id/e0123456")
+AddressBookParser -> DeleteCommandParser : parse("id/e0123456")
 activate DeleteCommandParser
 
-DeleteCommandParser -> ArgumentTokenizer: tokenize("delete id/e0123456", "id/", "ev/")
+DeleteCommandParser -> ArgumentTokenizer: tokenize("id/e0123456", "id/", "ev/")
 activate ArgumentTokenizer
 
 ArgumentTokenizer --> DeleteCommandParser: argMultiMap

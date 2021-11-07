@@ -1,0 +1,47 @@
+@startuml
+!include style.puml
+start
+: LogicManager
+executes
+EnrollCommand;
+
+: Check if the student
+exists in nustracker;
+
+if () then ([exists])
+
+    : Check if the event
+    exists in nustracker;
+
+    if () then ([exists])
+
+        : Check if the student
+        is on that event's
+        blacklist;
+
+        if () then ([not on blacklist])
+            : Update the student's
+            list of Enrolled Events;
+
+            : Update that event's
+            participants list;
+
+
+        else ([else])
+            : Throw Command Exception;
+        endif
+
+    else ([else])
+        : Throw Command Exception;
+    endif
+
+else ([else])
+    : Throw Command Exception;
+
+
+endif
+
+
+stop
+
+@enduml

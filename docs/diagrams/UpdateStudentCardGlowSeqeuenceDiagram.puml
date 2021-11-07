@@ -1,0 +1,27 @@
+@startuml
+participant ":StudentListPanel" as Foo
+participant ":ListView"         as Foo1
+
+box "UI" #e9afff
+participant Foo
+participant Foo1
+endbox
+'studentListView.setItems(studentList);
+'studentListView.setCellFactory(listView -> new StudentListViewCell());
+
+-> Foo : updateGlowColor("glowColorHexCode")
+activate Foo
+Foo -> Foo: refreshPanel()
+activate Foo
+Foo -> Foo: fillPanelWithCells()
+activate Foo
+Foo -> Foo1 : setItems()
+activate Foo1
+return
+Foo -> Foo1 : setCellFactory()
+activate Foo1
+return
+return
+return
+
+@enduml

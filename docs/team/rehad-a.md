@@ -35,6 +35,7 @@ Given below are my contributions to the project.
     * Added documentation for the `filter` feature.
   * Developer Guide:
     * Added use cases for the `filter` feature.
+    * Added implementation description and diagrams for the `filter` feature.
   * Updated the description in the product website page and changed the visuals for the website to match nustracker's theme.  
 
 * **Community**:

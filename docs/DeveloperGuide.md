@@ -24,11 +24,6 @@ NUSTracker allows event directors to manage student events attendance informatio
 student base.
 
 
---------------------------------------------------------------------------------------------------------------------
-
-## **Acknowledgements**
-
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -56,7 +51,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** has two classes called [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java). It is responsible for,
+**`Main`** has two classes called [`Main`](https://github.com/AY2122S1-CS2103T-T11-1/tp/blob/master/src/main/java/nustracker/Main.java) and [`MainApp`](https://github.com/AY2122S1-CS2103T-T11-1/tp/blob/master/src/main/java/nustracker/MainApp.java). It is responsible for,
 * At app launch: Initializes the components in the correct sequence, and connects them up with each other.
 * At shut down: Shuts down the components and invokes cleanup methods where necessary.
 
@@ -112,7 +107,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2122S1-CS2103T-T11-1/tp/blob/master/src/main/java/nustracker/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -141,9 +136,9 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2122S1-CS2103T-T11-1/tp/blob/master/src/main/java/nustracker/model/Model.java)
 
-![Model Class Diagram](images/ModelClassDiagram.png)
+# ![Model Class Diagram](images/ModelClassDiagram.png)
 
 The `Model` component,
 
@@ -158,7 +153,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2122S1-CS2103T-T11-1/tp/blob/master/src/main/java/nustracker/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="550" />
 
@@ -176,6 +171,49 @@ Classes used by multiple components are in the `nustracker.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Changing the profile picture glow feature
+
+This feature allows the user to change the color of the glow surrounding the profile pictures, which by default is a purplish/pink (**#e9affff**). 
+
+The main mechanism behind this feature is the use of *EventHandlers*, provided by the JavaFX platform, to listen for color selections made by the user to update the glow accordingly. 
+
+A following is a snippet of how an EventHandler was attached to the ColorPicker (using **pseudonym** for ColorPicker.)
+`nameOfColorPicker.setOnAction(e -> {
+updateGlowColor(getGlowHexCode());})`
+
+Next, the main mechanism.
+
+There are a few classes at play for the main process:
+* `ColorPicker` (default JavaFX class)
+* `SettingsWindow`
+* `ImageEditor `
+* `StudentListPanel`
+
+The following sequence diagram shows the typical chain of events within the internal system, followed by a brief description.
+
+![GlowSequenceDiagram](diagrams/GlowSequenceDiagram.png)
+
+1. When a color is selected (_change detected_), the `SettingsWindow#updateGlowColor()` is called. 
+2. There is a self-invocation of the `SettingsWindow#getGlowHexCode()` method, leading to the new  glow color hex code being retrieved by using `ColorPicker#getValue()`. 
+3. This value is then verified using the `ImageEditor#isValidColorHexCode()`.
+4. This valid value (assuming Step 3 returns true, else `ImageStorage.DEFAULT_COLOR` is used) is then used as a parameter when calling `StudentListPanel#updateGlow()`.
+
+Next, let's take a closer look at what happens within StudentListPanel.
+![UpdateStudentCardGlow](diagrams/UpdateStudentCardGlowSeqeuenceDiagram.png)
+
+1. When `StudentListPanel#updateGlowColor()` is called, there is a self-invocation of `StudentListPanel#refreshPanel()`.
+2. This then leads to _another_ self invocation of the `StudentListPanel#fillPanelWithCells()` method.
+3. Within the `StudentListPanel#fillPanelWithCells()` method, the `ListView#setItems()` and `ListView#setCellFactory()` methods are called. These methods—without going into too much detail—basically set the list that is used for ListView, and recreate every cell within in. For more information, please read the JavaFX documentation [here](https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/ListView.html).
+
+That was an overall view of how this feature was implemented. Although there were retracted details, their absence will not undermine the understanding of the feature.
+
+**Design Considerations**
+
+* **Option 1 (Current):** Change glow color via the ColorPicker GUI<br>
+This was chosen as the final choice over a command as it is more intuitive, as the user is able to browse through a large selection of colors and immediately view changes when selecting a color.
+* **Option 2 (CLI):** Change glow color via a command<br>
+This was not chosen as it is much less intuitive, as the user would have to input a color hex code which the everyday user might not be aware of (like white is **#ffffff**, etc.). Additionally, changing the glow color usually occurs once and is not an action a user might perform repeatedly, further reducing the necessity of a command.
 
 ### Creating an event
 This is a feature to allow the user to create an event. Currently, each event has a name, date, time, participant list and blacklist. Users can specify the name, date and time of an event using the `create` command.
@@ -221,6 +259,53 @@ The following sequence diagram shows how the enroll operation works:
 ![EnrollSequenceDiagram](images/EnrollSequenceDiagram.png)
 <br>_Sequence diagram for enrolling a student into an event_
 
+* Note that LogicManager is called using execute("enroll id/e0322322 ev/Sports Camp"). This information was truncated to reduce clutter in the diagram.<br>
+* For details of how the EnrollCommand internally enrolls a student into an event internally, please check out the corresponding activity diagram below.
+
+The following sequence diagram shows how a enroll operation gets its arguments from the prefixes:
+
+![EnrollParseArguments](images/EnrollParseArguments.png)
+<br>_Sequence diagram for parsing enroll command arguments_
+
+The following activity diagram shows how the enroll command enrolls a student into an event:
+![EnrollActivityDiagram](images/EnrollActivityDiagram.png)
+<br>_Activity diagram to show how the enroll command enrolls a student into an event_
+
+
+### Filtering Feature
+
+This is a feature to allow the user to filter the data by different fields. Currently, the implementation allows the user to filter by student IDs, names, majors, years, or event.
+
+This feature comes with the following classes:
+- nustracker.logic.commands.FilterCommand
+- nustracker.logic.commands.FilterEventCommand
+- nustracker.logic.commands.FilterIdCommand
+- nustracker.logic.commands.FilterMajorCommand
+- nustracker.logic.commands.FilterNameCommand
+- nustracker.logic.commands.FilterYearCommand
+- nustracker.logic.parser.FilterCommandParser
+- nustracker.model.student.EnrolledEventsContainsKeywordsPredicate
+- nustracker.model.student.MajorContainsKeywordsPredicate
+- nustracker.model.student.NameContainsKeywordsPredicate
+- nustracker.model.student.StudentIdContainsKeywordsPredicate
+- nustracker.model.student.YearContainsKeywordsPredicate
+
+The filter mechanism is facilitated by `FilterCommand`, an abstract class that extends `Command`.
+Each field that can be used for filtering is created as a new child class which extends `FilterCommand` (e.x. filtering by name is implemented in `FilterNameCommand`).
+Each one of these children classes has a predicate attribute which stores the keywords given by the user and uses them to filter the list of students.
+
+The following class diagram gives an overview on the design of the `filter` command
+![FilterClassDiagram](images/FilterClassDiagram.png)
+<br>_Class diagram for the filter command_
+
+* Notes that `FilterEventCommand` is the only class which extends `FilterCommand` and does not store a predicate, but an `EventName` instead.
+
+The following sequence diagram shows how filtering by student ID works:
+![FilterSequenceDiagram](images/FilterSequenceDiagram.png)
+<br>_Sequence diagram for filtering by student ID_
+
+* `FilterCommandParser` determines which field is used for filtering from the prefix that the user inputs (in this case the prefix is `id/`, hence `FilterCommandParser` calls `FilterIdCommand`)
+
 
 ### Exporting Feature
 
@@ -248,7 +333,7 @@ The following sequence diagram shows how the export operation works:
     * Pros: Very structured, easy to extend and add new commands that require export. Easy to add new filetypes for exporting and change which filetypes different commands use.
     * Cons: Takes longer to implement than the other 2 options
 
-In the end the first choice was chosen as it was more structured, and take less time to implement than alternative 3. e would consider alternative 3 to be the best long term option, and would implement it as such if time permitted.
+In the end the first choice was chosen as it was more structured, and take less time to implement than alternative 3. We would consider alternative 3 to be the best long term option, and would implement it as such if time permitted.
 
 
 ### \[Proposed\] Undo/redo feature
@@ -406,14 +491,13 @@ For all use cases below, the _System_ is **NUSTracker** and the _Actor_ is the *
 **MSS:**
 1. User types in command.
 2. nustracker adds the user to the address book.
-3. nustracker displays that user has been added, and corresponding details.<br>
+3. nustracker displays that user has been added, and corresponding details.
+
    Use case ends
 
 **Extensions:**
-* 1a. User types in an invalid format
-    * 1a1. nustracker shows an error message, and displays the correct format to use.<br>
-      Use case ends.
-  
+* 1a. User types in an invalid format.
+    * 1a1. nustracker shows an error message, and displays the correct format to use.
 
 * 1b. A student with the same student ID, phone number or email already exists in nustracker.
     * 1b1. nustracker shows an error message, and informs the user that a duplicate student already exists.<br>
@@ -806,10 +890,34 @@ Use case ends.
     * 1d1. nustracker shows an error message, informing the user that the specified student cannot be removed from the event as the student is not a participant.<br>
 Use case ends.
 
+<br>
+
+**<u>Use case UC14 - Display event/student list</u>**
+
+**Preconditions:** -
+
+**Guarantees:** The full unfiltered event/student list is displayed.
+
+**MSS:**
+
+1. User enters a command to show event/student list.
+2. nustracker shows the full unfiltered event/student list.<br>
+   Use case ends.
+
+**Extensions:**
+* 1a. User types in an invalid format.
+    * 1a1. nustracker shows an error message, and displays the correct format to use.<br>
+      Use case ends.
+
+
+* 2a. The student list is filtered by a previous filter command.
+    * 2a1. nustracker overwrites the filter, and displays the full unfiltered student list.<br>
+      Use case ends.
+
 
 <br>
 
-**<u>Use case UC14 - Exporting emails</u>**
+**<u>Use case UC15 - Export emails</u>**
 
 **Preconditions:** -
 
@@ -835,30 +943,68 @@ Use case ends.
 
 <br>
 
-**<u>Use case UC15 - Display event/student list</u>**
+**<u>Use case UC16 - Change profile picture glow color</u>**
 
-**Preconditions:** -
+**Preconditions:** There are students within nustracker.
 
-**Guarantees:** The full unfiltered event/student list is displayed.
+**Guarantees:** The profile picture glow color will change according to the user's input.
 
 **MSS:**
 
-1. User enters a command to show event/student list.
-2. nustracker shows the full unfiltered event/student list.<br>
+1. User opens the Settings window.
+2. User opens the color picker, and selects color.
+3. nustracker detects this change, and changes the profile picture glow color.
+
+   Use case ends.
+
+<br>
+
+**<u>Use case UC17 - Change profile picture glow color _via_ the .json file</u>**
+
+**Preconditions:** There are students within nustracker.
+
+**Guarantees:** The profile picture glow color will change according to the user's input.
+
+**MSS:**
+
+1. User closes nustracker.
+2. User opens the preferences.json file, and edits the profile color using a color hex code.
+3. nustracker detects this change, and changes profile picture glow color.
+
+   Use case ends.
+
+* 3a. User uses an invalid color hex code. 
+    * 3a1. User opens nustracker.
+    * 3a1. nustracker detects an invalid hex code and uses the default color (#e9afff) instead.
+    * 3a2. User closes nustracker and sets hex code again.
+      Steps 3a1 to 3a2 are repeated until a valid color hex code is used.<br>
+      Use case ends.
+     
+<br>
+
+**<u>Use case UC18 - Set/Change profile picture</u>**
+
+**Preconditions:** Image size is ideally less than 10mb, is a .png or .jpg image file, and is located within the profile-pictures folder that is created on system startup.
+
+**Guarantees:** Student with the corresponding Student ID now has a profile picture.
+
+**MSS:**
+
+1. User selects the image that they want to set as the target student (_e1111111_)'s profile picture.
+2. User renames the image to `e1111111`.
+3. User refreshes nustracker or restarts it.
+4. nustracker detects this change, and sets the student's profile picture.
+
    Use case ends.
 
 **Extensions:**
-* 1a. User types in an invalid format.
-    * 1a1. nustracker shows an error message, and displays the correct format to use.<br>
+
+* 4a. User renames the image wrongly
+    * 4a1. nustracker does not detect any changes, and student's profile picture is not updated.
+    * 4a2. User renames image again.<br>
+    * 4a3. User refreshes nustracker or restarts it.
+      Steps 4a1 to 4a3 are repeated until correct image name is used.<br>
       Use case ends.
-
-
-* 2a. The student list is filtered by a previous filter command.
-    * 2a1. nustracker overwrites the filter, and displays the full unfiltered student list.<br>
-      Use case ends.
-
-
-<br>
 
 ### Non-Functional Requirements
 
@@ -894,7 +1040,7 @@ testers are expected to do more *exploratory* testing.
 
     1. Download the jar file and copy into an empty folder
 
-    2. Double-click the jar file. <br>
+    2. Double-click the jar file. If you are using Mac, please start the .jar file via the terminal. <br>
    Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
@@ -985,7 +1131,7 @@ named `addressbook.json` in the data folder, then open **nustracker** and type i
 
    ii. Choose a student in the file and take note of his/her student ID.
 
-   iii. Choose an event in the file, and add this student ID into both the participants list as well as the blacklist.
+   iii. Choose an event in the file, and add this student ID into both the participants list and the blacklist.
 
    iv. If we choose a student with student ID `e0123456` and the event `Physics Camp`, the data in the JSON file should look like this:
    <br>
@@ -1002,7 +1148,50 @@ named `addressbook.json` in the data folder, then open **nustracker** and type i
     "blacklist" : [ "e0123456" ]
     ```
 
-   v. Re-launch the app by double-clicking the jar file.<br>
+    v. Re-launch the app by double-clicking the jar file.<br>
+       Expected: **nustracker** will not be able to load the data and the student and event lists are blank.
+
+
+### Manual test cases:
+
+### Deleting a student
+
+1. Deleting a student
+
+   1. Test case 1: `delete id/1234567`<br>
+       Prerequisites: Load sample data or ensure a student with the student id e1234567 exists in the address book.
+   
+       Expected: Student with student ID "e1234567" is deleted. Details of the deleted student shown in the status message. Timestamp in the status bar is updated.
+
+   2. Test case 2: `delete id/e0000000`<br>
+     Prerequisites: Load sample data or ensure no student has the student id e0000000 exists in the address book.
+
+      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
+
+   3. Test case 3: `delete id/e12345`<br>
+   Expected: Incorrect student id format. Error details shown in the status message. Status bar remains the same.
+
+   4. Other incorrect delete commands to try: `delete id/`, `delete id/abc`, `delete id/[incorrect student id format]` (correct student id format : `eXXXXXXX` where X is an integer from 0-9)<br>
+      Expected: Similar to previous.
+
+2. _{ more test cases …​ }_
+
+### Changing the profile picture
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** 
+There are sample images provided within the .zip file you can utilize for testing.
+</div>
+
+1. Test case 1: `Rename sample image name to e*******.png`<br>
+Prerequisites: A student with Student ID `e*******` exists within **nustracker**. <br>
+Expected: After using the `Refresh` command or restarting **nustracker**, the student with Student ID `e*******` has that particular profile picture.
+
+2. Test case 2: `Remove profile picture beloning to e*******`<br>
+Prerequisites: A student with Student ID `e*******` exists and currently has a profile picture (_That is, there is an image in the **profile-pictures** with a name corresponding to the student's Student ID_).<br>
+Expected: After using the `Refresh` command or restarting **nustracker**, the student's profile picture reverts to the default image.
+
+### Saving data
+   1. Re-launch the app by double-clicking the jar file.<br>
    Expected: **nustracker** will not be able to load the data and the student and event lists are blank.
 
 

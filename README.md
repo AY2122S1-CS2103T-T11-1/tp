@@ -2,7 +2,7 @@
 
 ![Ui](docs/images/Ui.png)
 
-![Ui](docs/images/Ui1.png)
+![Ui](docs/images/user-guide/after-creating-event.png)
 
 This is the Team Project for CS2103T, done by T11-1.
 

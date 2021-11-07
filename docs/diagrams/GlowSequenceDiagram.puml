@@ -1,0 +1,35 @@
+@startuml
+participant ":SettingsWindow"        as Foo
+participant ":ColorPicker"           as Foo1
+participant ":ImageEditor"           as Foo2
+participant ":StudentListPanel"      as Foo3
+
+box "UI" #e9afff
+participant Foo
+participant Foo1
+participant Foo2
+participant Foo3
+endbox
+
+-> Foo : updateGlowColor()
+activate Foo
+Foo -> Foo : getGlowHexCode()
+activate Foo
+Foo -> Foo1: getValue()
+activate Foo1
+return "glowColorHexCode"
+note right: The glow color is represented as a string hex code!
+return
+
+Foo -> Foo2 : isValidColorHexCode("glowColorHexCode")
+activate Foo2
+return
+
+Foo -> Foo3 : updateGlow("glowColorHexCode":);
+ref over Foo3
+Update StudentCard glow
+end ref
+activate Foo3
+return
+
+@enduml

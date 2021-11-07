@@ -1,18 +1,22 @@
 @startuml
-participant ":LogicManager"             as Foo
-participant ":AddressBookParser"        as Foo1
-participant ":ExportCommand"            as Foo2
-participant "Exporting"                 as Foo3
+!include style.puml
 
-box "Logic" #dcbcff
+participant ":LogicManager"             as Foo LOGIC_COLOR
+participant ":AddressBookParser"        as Foo1 LOGIC_COLOR
+participant ":ExportCommand"            as Foo2 LOGIC_COLOR
+participant "Exporting"                 as Foo3 STORAGE_COLOR
+
+box "Logic" LOGIC_COLOR_T1
 participant Foo
 participant Foo1
 participant Foo2
 endbox
 
-box "Storage" #ffa0a0
+box "Storage" STORAGE_COLOR_T1
 participant Foo3
 endbox
+
+activate Foo
 
 Foo -> Foo1 : execute("export FILENAME")
 activate Foo1
@@ -26,4 +30,9 @@ Foo -> Foo2 : execute()
 activate Foo2
 Foo2 -> Foo3 : exportEmails()
 return Success Message
+
+Foo -[hidden]-> Foo1
+
+deactivate Foo
+
 @enduml

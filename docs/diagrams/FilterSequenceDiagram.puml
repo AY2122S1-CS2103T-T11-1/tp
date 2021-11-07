@@ -1,0 +1,100 @@
+@startuml
+!include style.puml
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":FilterCommandParser" as FilterCommandParser LOGIC_COLOR
+participant "cmd:FilterIdCommand" as FilterIdCommand LOGIC_COLOR
+participant ":CommandResult" as CommandResult LOGIC_COLOR
+participant ":ParserUtil" as ParserUtil LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant "id:StudentId" as StudentId MODEL_COLOR
+end box
+
+[->LogicManager: execute("filter id/e0123456")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("fitler id/e0123456")
+activate AddressBookParser
+
+create FilterCommandParser
+AddressBookParser -> FilterCommandParser
+activate FilterCommandParser
+
+FilterCommandParser --> AddressBookParser
+deactivate FilterCommandParser
+
+AddressBookParser -> FilterCommandParser : parse("id/e0123456")
+activate FilterCommandParser
+
+loop #transparent i < studendIds length
+FilterCommandParser -> ParserUtil : parseStudentId()
+activate ParserUtil
+
+create StudentId
+ParserUtil -> StudentId : isValidStudentId()
+activate StudentId
+
+StudentId --> ParserUtil : id
+deactivate StudentId
+
+StudentId -[hidden]-> ParserUtil
+destroy StudentId
+StudentId -[hidden]-> ParserUtil
+
+create StudentId
+ParserUtil -> StudentId: new StudentId()
+activate StudentId
+
+StudentId --> ParserUtil : id
+deactivate StudentId
+
+ParserUtil --> FilterCommandParser : id
+deactivate ParserUtil
+end
+
+create FilterIdCommand
+FilterCommandParser -> FilterIdCommand : ids
+activate FilterIdCommand
+
+FilterIdCommand --> FilterCommandParser : cmd
+deactivate FilterIdCommand
+
+FilterCommandParser --> AddressBookParser : cmd
+deactivate FilterCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+FilterCommandParser -[hidden]-> AddressBookParser
+destroy FilterCommandParser
+
+AddressBookParser --> LogicManager : cmd
+deactivate AddressBookParser
+
+LogicManager -> FilterIdCommand : execute()
+activate FilterIdCommand
+
+FilterIdCommand -> Model : updateFilter()
+activate Model
+
+Model --> FilterIdCommand :
+deactivate Model
+
+create CommandResult
+FilterIdCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> FilterIdCommand : result
+deactivate CommandResult
+
+FilterIdCommand --> LogicManager : result
+deactivate FilterIdCommand
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+FilterIdCommand -[hidden]-> LogicManager
+destroy FilterIdCommand
+
+[<--LogicManager : result
+deactivate LogicManager
+@enduml

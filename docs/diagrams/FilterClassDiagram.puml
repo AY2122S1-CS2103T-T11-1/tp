@@ -1,0 +1,51 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor LOGIC_COLOR_T4
+skinparam classBackgroundColor LOGIC_COLOR
+
+package Logic {
+Class "{abstract}\nFilterCommand" as FilterCommand
+Class "{abstract}\nCommand" as Command
+Class FilterIdCommand
+Class FilterMajorCommand
+Class FilterYearCommand
+Class FilterNameCommand
+Class FilterEventCommand
+
+}
+
+package Model {
+Class MajorContainsKeywordsPredicate MODEL_COLOR
+Class NameContainsKeywordsPredicate MODEL_COLOR
+Class StudentIdContainsKeywordsPredicate MODEL_COLOR
+Class YearContainsKeywordsPredicate MODEL_COLOR
+Class EventName MODEL_COLOR
+Class StudentId MODEL_COLOR
+Class Name MODEL_COLOR
+Class Major MODEL_COLOR
+Class Year MODEL_COLOR
+}
+
+
+Class HiddenOutside #FFFFFF
+HiddenOutside ..> Command
+
+FilterCommand -up-|> Command
+FilterIdCommand -up-|> FilterCommand
+FilterNameCommand -up-|> FilterCommand
+FilterYearCommand -up-|> FilterCommand
+FilterMajorCommand -up-|> FilterCommand
+FilterEventCommand -up-|> FilterCommand
+
+FilterIdCommand -down->"1" StudentIdContainsKeywordsPredicate
+FilterNameCommand -down->"1" NameContainsKeywordsPredicate
+FilterYearCommand -down->"1" YearContainsKeywordsPredicate
+FilterMajorCommand -down->"1" MajorContainsKeywordsPredicate
+FilterEventCommand -down->"1" EventName
+
+StudentIdContainsKeywordsPredicate -down[MODEL_COLOR_T4]->"1...*" StudentId
+NameContainsKeywordsPredicate -down[MODEL_COLOR_T4]->"1...*" Name
+YearContainsKeywordsPredicate -down[MODEL_COLOR_T4]->"1...*" Year
+MajorContainsKeywordsPredicate -down[MODEL_COLOR_T4]->"1...*" Major
+@enduml

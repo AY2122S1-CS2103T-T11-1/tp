@@ -40,7 +40,7 @@ You can reach us through the [team repository](https://github.com/AY2122S1-CS210
 [[portfolio](team/tlchicken.md)]
 
 * Role: Scheduling and Tracking
-* Responsibilities:
+* Responsibilities: In charge of the Issue Tracker for the team's repo.
 
 ### Joel Sung
 

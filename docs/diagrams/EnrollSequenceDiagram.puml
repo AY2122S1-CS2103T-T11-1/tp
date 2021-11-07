@@ -1,0 +1,75 @@
+@startuml
+!include style.puml
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":EnrollCommandParser" as EnrollCommandParser LOGIC_COLOR
+participant "cmd:EnrollCommand" as EnrollCommand LOGIC_COLOR
+participant ":CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+
+[->LogicManager: execute
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("enroll \nid/e0322322 \nev/Sports Camp")
+activate AddressBookParser
+
+create EnrollCommandParser
+AddressBookParser -> EnrollCommandParser
+activate EnrollCommandParser
+
+EnrollCommandParser --> AddressBookParser
+deactivate EnrollCommandParser
+
+AddressBookParser -> EnrollCommandParser : parse("id/e0322322 \nev/Sports Camp")
+activate EnrollCommandParser
+
+ref over EnrollCommandParser
+get enroll arguments from prefixes
+end ref
+
+
+create EnrollCommand
+EnrollCommandParser -> EnrollCommand : new EnrollCommand(\nstudentId, eventName)
+activate EnrollCommand
+
+EnrollCommand --> EnrollCommandParser : cmd
+deactivate EnrollCommand
+
+EnrollCommandParser --> AddressBookParser : cmd
+deactivate EnrollCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+EnrollCommandParser -[hidden]-> AddressBookParser
+destroy EnrollCommandParser
+
+AddressBookParser --> LogicManager : cmd
+deactivate AddressBookParser
+
+LogicManager -> EnrollCommand : execute()
+activate EnrollCommand
+
+EnrollCommand -[hidden]->
+EnrollCommand -[hidden]->
+EnrollCommand -[hidden]->
+
+
+create CommandResult
+EnrollCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> EnrollCommand : result
+deactivate CommandResult
+
+
+
+EnrollCommand --> LogicManager : result
+deactivate EnrollCommand
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+EnrollCommand -[hidden]-> LogicManager
+destroy EnrollCommand
+
+[<--LogicManager : result
+deactivate LogicManager
+@enduml
